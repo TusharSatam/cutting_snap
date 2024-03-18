@@ -15,6 +15,7 @@ import PrimaryButton from '../components/buttons/PrimaryButton';
 import CustomButton from '../components/buttons/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Toast from 'react-native-toast-message';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 interface ListItem {
   id: number;
   challanNumber: number;
@@ -50,9 +51,7 @@ const Calculator: React.FC = () => {
   const handleAdd = () => {
     if (
       challanNumber !== null ||
-      type !== '' &&
-      quantity !== null &&
-      pricePerPiece !== null
+      (type !== '' && quantity !== null && pricePerPiece !== null)
     ) {
       if (editIndex !== null) {
         // Edit existing item
@@ -141,6 +140,92 @@ const Calculator: React.FC = () => {
     setType('');
     setPricePerPiece(null);
   };
+
+  const generatePDF = async () => {
+    try {
+      const tableRows = Lists.map(
+        (item, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item.challanNumber || ''} ${item.type || ''}</td>
+        <td>${item.quantity}</td>
+      </tr>
+    `,
+      ).join('');
+
+      const htmlContent = `
+      <html>
+        <head>
+          <style>
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            th, td {
+              border: 1px solid black;
+              padding: 8px;
+              text-align: center;
+              font-size:24px;
+            }
+            .container {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              width: 100%;
+            }
+            .title {
+              text-align: center;
+            }
+            .total {
+              margin-top: 20px;
+              font-size:28px;
+              text-align: right;
+              width: 100%;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h2 class="title">${date_From.toLocaleDateString()} - ${date_To.toLocaleDateString()}</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Challan Number/Type</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRows}
+              </tbody>
+            </table>
+            <div class="total">Total Piece: ${Total}</div>
+          </div>
+        </body>
+      </html>
+      `;
+
+      const options = {
+        html: htmlContent,
+        fileName: 'table_pdf',
+        directory: 'Documents',
+      };
+
+      const file = await RNHTMLtoPDF.convert(options);
+
+      Toast.show({
+        type: 'success',
+        text1: 'PDF Generated',
+        text2: 'PDF file generated successfully!',
+      });
+      console.log('pdf function', file);
+
+      console.log('PDF file:', file.filePath);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
+
   return (
     <View style={styles.calculator}>
       {/* All Input Section */}
@@ -271,6 +356,7 @@ const Calculator: React.FC = () => {
                 borderWidth: 1,
               }}
               buttonstyle={{color: '#0096FF'}}
+              action={generatePDF}
             />
             <CustomButton
               text={'Clear All'}
@@ -317,15 +403,16 @@ const Calculator: React.FC = () => {
           <View style={styles.tableWrapper}>
             <Table borderStyle={{borderWidth: 1, borderColor: '#0096FF'}}>
               <Row
-                data={['#', 'Challan Number', 'Type', 'Quantity', 'Actions']}
+                data={['#', 'Challan Number/Type', 'Quantity', 'Actions']}
                 textStyle={styles.headText}
                 style={styles.head}
               />
               <Rows
                 data={Lists.map((item, index) => [
                   index + 1,
-                  item.challanNumber,
-                  item.type,
+                  `${item.challanNumber !== null ? item.challanNumber : ''}  ${
+                    item.type !== null ? item.type : ''
+                  }`,
                   item.quantity,
                   <View style={styles.actionButtons}>
                     <CustomButton
