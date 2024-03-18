@@ -13,7 +13,8 @@ import DatePicker from 'react-native-date-picker';
 import {Table, Row, Rows} from 'react-native-table-component';
 import PrimaryButton from '../components/buttons/PrimaryButton';
 import CustomButton from '../components/buttons/CustomButton';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Toast from 'react-native-toast-message';
 interface ListItem {
   id: number;
   challanNumber: number;
@@ -33,8 +34,6 @@ const Calculator: React.FC = () => {
   const [open_To, setOpen_To] = useState<boolean>(false);
   const [Lists, setLists] = useState<ListItem[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const [income, setIncome] = useState<number>(0);
   const [Total, setTotal] = useState<number>(0);
 
@@ -50,9 +49,9 @@ const Calculator: React.FC = () => {
 
   const handleAdd = () => {
     if (
-      challanNumber !== null &&
-      quantity !== null &&
+      challanNumber !== null ||
       type !== '' &&
+      quantity !== null &&
       pricePerPiece !== null
     ) {
       if (editIndex !== null) {
@@ -62,6 +61,7 @@ const Calculator: React.FC = () => {
         );
         setLists(updatedLists);
         setEditIndex(null);
+        clearInputFields();
       } else {
         // Add new item
         const id = Lists.length > 0 ? Lists[Lists.length - 1].id + 1 : 1;
@@ -73,15 +73,18 @@ const Calculator: React.FC = () => {
           pricePerPiece,
         };
         setLists(prevLists => [...prevLists, newObj]);
+        clearInputFields();
       }
-      // Clear input fields
-      setChallanNumber(null);
-      setQuantity(null);
-      setType('');
-      setPricePerPiece(null);
-      setSuccessMessage('Item added successfully!');
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Item added successfully! 👋',
+      });
     } else {
-      setInfoMessage('Please fill in all fields.');
+      Toast.show({
+        type: 'info',
+        text1: 'Please fill in all fields. ',
+      });
     }
   };
 
@@ -116,7 +119,11 @@ const Calculator: React.FC = () => {
                 setQuantity(null);
                 setType('');
                 setPricePerPiece(null);
-                setSuccessMessage('Item deleted successfully!');
+                Toast.show({
+                  type: 'success',
+                  text1: 'Success',
+                  text2: 'Item deleted successfully! 👋',
+                });
               },
               style: 'destructive',
             },
@@ -128,29 +135,14 @@ const Calculator: React.FC = () => {
         console.log('Unknown action:', action);
     }
   };
-  useEffect(() => {
-    if (successMessage || infoMessage) {
-      const timer = setTimeout(() => {
-        setSuccessMessage(null);
-        setInfoMessage(null);
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [successMessage, infoMessage]);
+  const clearInputFields = () => {
+    setChallanNumber(null);
+    setQuantity(null);
+    setType('');
+    setPricePerPiece(null);
+  };
   return (
     <View style={styles.calculator}>
-      {/* message */}
-      {successMessage && (
-        <View style={styles.successMessage}>
-          <Text style={styles.successMessageText}>{successMessage}</Text>
-        </View>
-      )}
-      {infoMessage && (
-        <View style={styles.infoMessage}>
-          <Text style={styles.infoMessageText}>{infoMessage}</Text>
-        </View>
-      )}
       {/* All Input Section */}
       <View style={styles.InputContainer}>
         <View style={commonStyles.flexRow}>
@@ -194,10 +186,15 @@ const Calculator: React.FC = () => {
             placeholderTextColor="#D3D3D3"
           />
           <View style={styles.AddBtn}>
-            <CustomButton
+            <PrimaryButton
               text="Add"
               action={handleAdd}
-              style={{backgroundColor: '#0096FF'}}
+              style={{
+                backgroundColor: '#0096FF',
+                height: '100%',
+                width: '100%',
+                fontSize: 20,
+              }}
             />
           </View>
         </View>
@@ -205,10 +202,13 @@ const Calculator: React.FC = () => {
       {/*  Date Picker Section */}
 
       <View style={styles.datePickerContainer}>
-        <Text style={{color: 'black', fontSize: 20}}>Date</Text>
+        <Text
+          style={{color: 'black', fontSize: 20, fontFamily: 'Laila-Regular'}}>
+          Date
+        </Text>
         <View style={styles.DateBtns}>
           <View>
-            <CustomButton
+            <PrimaryButton
               text="Start"
               action={() => setOpen_From(true)}
               style={{backgroundColor: '#0096FF'}}
@@ -229,7 +229,7 @@ const Calculator: React.FC = () => {
           </View>
           <Text style={{color: 'black', fontSize: 20}}>-</Text>
           <View>
-            <CustomButton
+            <PrimaryButton
               text="End"
               action={() => setOpen_To(true)}
               style={{backgroundColor: '#0096FF'}}
@@ -252,20 +252,65 @@ const Calculator: React.FC = () => {
       </View>
       {/*  List Section */}
       <View style={styles.listsWrapper}>
-        <Text style={{color: 'black', marginBottom: 10}}>
+        <Text
+          style={{
+            color: 'black',
+            marginBottom: 10,
+            fontFamily: 'Laila-Regular',
+          }}>
           {date_From.toLocaleDateString()} - {date_To.toLocaleDateString()}
         </Text>
         {/* lists Options */}
         <View style={styles.listsOptions}>
-          <CustomButton text={'pdf'} style={{backgroundColor: '#0096FF'}} />
-          <CustomButton text={'Clear'} style={{backgroundColor: 'red'}} />
+          <>
+            <CustomButton
+              text={'PDF'}
+              style={{
+                backgroundColor: 'white',
+                borderColor: '#0096FF',
+                borderWidth: 1,
+              }}
+              buttonstyle={{color: '#0096FF'}}
+            />
+            <CustomButton
+              text={'Clear All'}
+              style={{
+                backgroundColor: 'white',
+                borderColor: 'red',
+                borderWidth: 1,
+              }}
+              buttonstyle={{color: 'red'}}
+            />
+          </>
           <View>
-            <Text style={{color: 'black', fontSize: 20}}>₹ {income.toLocaleString()}</Text>
-            <Text style={{color: 'black', fontSize: 20}}>Total : {Total}</Text>
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 16,
+                fontFamily: 'Laila-Regular',
+              }}>
+              ₹ {income.toLocaleString()}
+            </Text>
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 16,
+                fontFamily: 'Laila-Regular',
+              }}>
+              Total : {Total}
+            </Text>
           </View>
         </View>
         {Lists.length === 0 ? (
-          <Text style={[styles.noData, {textAlign: 'center', lineHeight: 300}]}>
+          <Text
+            style={[
+              styles.noData,
+              {
+                textAlign: 'center',
+                lineHeight: 300,
+                fontFamily: 'Laila-Regular',
+              },
+            ]}>
             No Data
           </Text>
         ) : (
@@ -285,13 +330,20 @@ const Calculator: React.FC = () => {
                   <View style={styles.actionButtons}>
                     <CustomButton
                       text="Edit"
-                      style={{backgroundColor: 'green'}}
+                      style={{
+                        backgroundColor: 'white',
+                      }}
+                      buttonstyle={{color: '#0096FF'}}
                       action={() => handleAction('edit', item, index)}
+                      icon={<Icon name="edit" size={20} color="#0096FF" />}
                     />
                     <CustomButton
-                      text="Delete"
-                      style={{backgroundColor: 'red'}}
+                      style={{
+                        backgroundColor: 'white',
+                      }}
+                      buttonstyle={{color: 'red'}}
                       action={() => handleAction('delete', item, index)}
+                      icon={<Icon name="trash" size={20} color="red" />}
                     />
                   </View>,
                 ])}
@@ -309,8 +361,7 @@ const styles = StyleSheet.create({
   calculator: {
     width: '100%',
     height: '100%',
-    position: 'relative',
-    fontFamily: 'Times New Roman',
+    fontFamily: 'Laila-Regular',
   },
   datePickerContainer: {
     display: 'flex',
@@ -320,7 +371,8 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   InputContainer: {
-    backgroundColor: '#bf8bff',
+    backgroundColor: '#9775FA',
+    borderWidth: 2,
     height: 200,
     borderRadius: 20,
     display: 'flex',
@@ -334,29 +386,33 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     backgroundColor: 'white',
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 10,
     borderRadius: 10,
     color: '#0096FF',
     height: 50,
     flex: 1,
+    fontFamily: 'Laila-Regular',
   },
   inputTypeBox: {
     backgroundColor: 'white',
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 10,
     borderRadius: 10,
     color: '#0096FF',
     height: 50,
     width: '100%',
+    fontFamily: 'Laila-Regular',
   },
   AddBtn: {
     flex: 1,
     display: 'flex',
     justifyContent: 'center',
-    alignContent: 'center',
+    alignItems: 'center',
     borderRadius: 10,
     overflow: 'hidden',
+    height: 48,
+    fontSize: 15,
   },
   DateBtns: {
     display: 'flex',
@@ -366,7 +422,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   listsWrapper: {
-    backgroundColor: '#D3D3D3',
+    // backgroundColor: '#D3D3D3',
     padding: 4,
     display: 'flex',
     justifyContent: 'center',
@@ -375,7 +431,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 30,
     width: '100%',
-    overflow:"scroll"
+    overflow: 'scroll',
   },
   tableWrapper: {
     width: '100%',
@@ -384,40 +440,31 @@ const styles = StyleSheet.create({
   item: {
     color: 'black',
   },
-  head: {height: 'auto', backgroundColor: '#f1f8ff'},
-  headText: {margin: 3, textAlign: 'center', color: '#0096FF'},
-  text: {margin: 3, textAlign: 'center', color: 'black'},
-  noData: {color: 'gray'},
-  actionButtons: {display: 'flex', gap: 4, marginVertical: 8},
-  successMessage: {
-    position: 'absolute',
-    top: 20,
-    right: 10,
-    backgroundColor: '#32de84',
-    padding: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginBottom: 10,
-    zIndex: 100,
+  head: {
+    height: 'auto',
+    backgroundColor: '#f1f8ff',
+    fontFamily: 'Laila-Regular',
   },
-  successMessageText: {
-    color: 'white',
+  headText: {
+    margin: 3,
     textAlign: 'center',
+    color: '#0096FF',
+    fontSize: 10,
+    fontFamily: 'Laila-Regular',
   },
-  infoMessage: {
-    position: 'absolute',
-    top: 20,
-    right: 10,
-    backgroundColor: '#ffca28',
-    padding: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginBottom: 10,
-    zIndex: 100,
-  },
-  infoMessageText: {
+  text: {
+    margin: 3,
+    textAlign: 'center',
     color: 'black',
-    textAlign: 'center',
+    fontSize: 10,
+    fontFamily: 'Laila-Regular',
+  },
+  noData: {color: 'gray'},
+  actionButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 4,
+    marginVertical: 8,
   },
   listsOptions: {
     backgroundColor: 'white',

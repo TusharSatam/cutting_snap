@@ -14,6 +14,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-cutting_snap-cutting_snapTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-cutting_snap-cutting_snapTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F3AC47868D4646849912DF74 /* Laila-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 940BF8EF0A134A1A8017A832 /* Laila-Medium.ttf */; };
+		C2550027B83C41C9A7C268F7 /* Laila-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72A22452B56C4A55A13BCC05 /* Laila-Regular.ttf */; };
+		C6E83F48898A49868147FA3E /* Laila-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C7FBF5E3ADB24DCA992EF1B2 /* Laila-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +47,9 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = cutting_snap/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-cutting_snap-cutting_snapTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cutting_snap-cutting_snapTests.release.xcconfig"; path = "Target Support Files/Pods-cutting_snap-cutting_snapTests/Pods-cutting_snap-cutting_snapTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		940BF8EF0A134A1A8017A832 /* Laila-Medium.ttf */ = {isa = PBXFileReference; name = "Laila-Medium.ttf"; path = "../assets/fonts/Laila-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		72A22452B56C4A55A13BCC05 /* Laila-Regular.ttf */ = {isa = PBXFileReference; name = "Laila-Regular.ttf"; path = "../assets/fonts/Laila-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C7FBF5E3ADB24DCA992EF1B2 /* Laila-SemiBold.ttf */ = {isa = PBXFileReference; name = "Laila-SemiBold.ttf"; path = "../assets/fonts/Laila-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				49864FF5F6964E408166CB0F /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +154,17 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		49864FF5F6964E408166CB0F /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				940BF8EF0A134A1A8017A832 /* Laila-Medium.ttf */,
+				72A22452B56C4A55A13BCC05 /* Laila-Regular.ttf */,
+				C7FBF5E3ADB24DCA992EF1B2 /* Laila-SemiBold.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -243,6 +261,9 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				F3AC47868D4646849912DF74 /* Laila-Medium.ttf in Resources */,
+				C2550027B83C41C9A7C268F7 /* Laila-Regular.ttf in Resources */,
+				C6E83F48898A49868147FA3E /* Laila-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

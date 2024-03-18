@@ -1,32 +1,40 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-
+import {TouchableOpacity, Text, StyleSheet} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 interface CustomButtonProps {
-  text: string;
+  text?: string;
   action?: () => void;
   style?: object;
+  buttonstyle?: object;
+  icon?: JSX.Element;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({ text, action, style }) => {
+const CustomButton: React.FC<CustomButtonProps> = ({
+  text,
+  action,
+  style,
+  buttonstyle,
+  icon,
+}) => {
+  console.log(icon);
+  
   return (
     <TouchableOpacity style={[styles.button, style]} onPress={action}>
-      <Text style={styles.buttonText}>{text}</Text>
+      {icon ? icon : <Text style={[styles.textstyle,buttonstyle]}>{text}</Text>}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    padding: 6,
     borderRadius: 5,
     alignItems: 'center',
-    justifyContent: 'center',
+    fontFamily: 'Laila-Regular'
   },
-  buttonText: {
-    color: 'white',
-    fontSize: 12,
-  },
+  textstyle:{
+    fontFamily: 'Laila-Regular'
+  }
 });
 
 export default CustomButton;

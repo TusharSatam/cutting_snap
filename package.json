@@ -12,8 +12,11 @@
   "dependencies": {
     "react": "18.2.0",
     "react-native": "0.73.6",
+    "react-native-asset": "^2.1.1",
     "react-native-date-picker": "^4.4.1",
-    "react-native-table-component": "^1.2.2"
+    "react-native-table-component": "^1.2.2",
+    "react-native-toast-message": "^2.2.0",
+    "react-native-vector-icons": "^10.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
