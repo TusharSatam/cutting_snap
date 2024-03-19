@@ -16,7 +16,6 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   buttonstyle,
   icon,
 }) => {
-  console.log(icon);
   
   return (
     <TouchableOpacity style={[styles.button, style]} onPress={action}>

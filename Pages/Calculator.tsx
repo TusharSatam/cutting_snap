@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Alert, StyleSheet, Text, TextInput, View} from 'react-native';
 import commonStyles from '../styles/common-styles';
 import DatePicker from 'react-native-date-picker';
 import {Table, Row, Rows} from 'react-native-table-component';
@@ -16,6 +8,8 @@ import CustomButton from '../components/buttons/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Toast from 'react-native-toast-message';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import FileViewer from 'react-native-file-viewer';
+import Share from "react-native-share"
 interface ListItem {
   id: number;
   challanNumber: number;
@@ -143,6 +137,9 @@ const Calculator: React.FC = () => {
 
   const generatePDF = async () => {
     try {
+      const today = new Date();
+      const formattedDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+  
       const tableRows = Lists.map(
         (item, index) => `
       <tr>
@@ -199,7 +196,7 @@ const Calculator: React.FC = () => {
                 ${tableRows}
               </tbody>
             </table>
-            <div class="total">Total Piece: ${Total}</div>
+            <div class="total">Total Piece: ${Total.toLocaleString()}</div>
           </div>
         </body>
       </html>
@@ -207,24 +204,48 @@ const Calculator: React.FC = () => {
 
       const options = {
         html: htmlContent,
-        fileName: 'table_pdf',
-        directory: 'Documents',
+        fileName: `${formattedDate}_`,
+        base64: true,
       };
 
       const file = await RNHTMLtoPDF.convert(options);
+      const base64PDF = `data:application/pdf;base64,${file.base64}`;
+      console.log("base64PDF",base64PDF);
+      Share.open({
+        message: 'Use my application',
+        url: `file://${file.filePath}`,
+      });
+      // FileViewer.open(base64PDF)
+      // .then(() => {
+      //   console.log('PDF opened successfully');
+      // })
+      // .catch(error => {
+      //   console.error('Error opening PDF:', error);
+      // });
+
+      
+
+      // Alert.alert(
+      //   'Successfully Exported',
+      //   file.filePath,
+      //   [
+      //     {text: 'Cancel', style: 'cancel'},
+      //     {text: 'Open', onPress: () => openFile(file.filePath)},
+      //   ],
+      //   {cancelable: true},
+      // );
 
       Toast.show({
         type: 'success',
         text1: 'PDF Generated',
         text2: 'PDF file generated successfully!',
       });
-      console.log('pdf function', file);
-
-      console.log('PDF file:', file.filePath);
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
   };
+
+
 
   return (
     <View style={styles.calculator}>
