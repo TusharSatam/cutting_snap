@@ -17,6 +17,7 @@
     "react-native-file-viewer": "^2.1.5",
     "react-native-html-to-pdf": "^0.12.0",
     "react-native-share": "^10.0.2",
+    "react-native-splash-screen": "^3.3.0",
     "react-native-table-component": "^1.2.2",
     "react-native-toast-message": "^2.2.0",
     "react-native-vector-icons": "^10.0.3"

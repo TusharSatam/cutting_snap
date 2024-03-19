@@ -1,9 +1,14 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Calculator from './Pages/Calculator';
 import Toast from 'react-native-toast-message';
+import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <ScrollView style={styles.appContainer}>
       <View

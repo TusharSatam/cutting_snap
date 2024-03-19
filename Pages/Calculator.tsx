@@ -215,25 +215,6 @@ const Calculator: React.FC = () => {
         message: 'Use my application',
         url: `file://${file.filePath}`,
       });
-      // FileViewer.open(base64PDF)
-      // .then(() => {
-      //   console.log('PDF opened successfully');
-      // })
-      // .catch(error => {
-      //   console.error('Error opening PDF:', error);
-      // });
-
-      
-
-      // Alert.alert(
-      //   'Successfully Exported',
-      //   file.filePath,
-      //   [
-      //     {text: 'Cancel', style: 'cancel'},
-      //     {text: 'Open', onPress: () => openFile(file.filePath)},
-      //   ],
-      //   {cancelable: true},
-      // );
 
       Toast.show({
         type: 'success',
@@ -245,7 +226,38 @@ const Calculator: React.FC = () => {
     }
   };
 
-
+  const clearAllLists = () => {
+    Alert.alert(
+      'Confirm Clear',
+      'Are you sure you want to clear all items?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Clearing canceled'),
+          style: 'cancel',
+        },
+        {
+          text: 'Clear',
+          onPress: () => {
+            // Clear all items from the list
+            setLists([]);
+            setChallanNumber(null);
+            setQuantity(null);
+            setType('');
+            setPricePerPiece(null);
+            setEditIndex(null);
+            Toast.show({
+              type: 'success',
+              text1: 'Success',
+              text2: 'All items cleared successfully! 👋',
+            });
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <View style={styles.calculator}>
@@ -381,6 +393,7 @@ const Calculator: React.FC = () => {
             />
             <CustomButton
               text={'Clear All'}
+              action={clearAllLists}
               style={{
                 backgroundColor: 'white',
                 borderColor: 'red',
